@@ -11,6 +11,8 @@ USTH ICT 2020 Distributed Systems
 Group Info
 =======================
 
-* Name 1 (ID1)
-* Name 2 (ID2)
-
+* Nguyen Duc Dan (BI8-028)
+* Nguyen Tri Huan (BI8-069)
+* Nguyen Huu Chi Dat (BI8-040)
+* Nguyen Xuay Duy Anh (BI8-014)
+* Pham Minh Giang (BI8-054)
