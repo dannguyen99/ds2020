@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{listings}
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+}
+
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$$},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+\begin{document}
+	
+	\begin{titlepage}
+		
+		\newcommand{\HRule}{\rule{\linewidth}{0.1mm}} % Defines a new command for the horizontal lines, change thickness here
+		
+		\center % Center everything on the page
+		
+		%----------------------------------------------------------------------------------------
+		%	HEADING SECTIONS
+		%----------------------------------------------------------------------------------------
+		
+		\textsc{\LARGE University of Science and
+			\linebreak
+			\linebreak
+			Technology of Hanoi}\\[2cm] % Name of your university/college
+		\textsc{\Large Distributed System}\\[0.5cm] % Major heading such as course name
+		\textsc{\large Practical Work I}\\[0.5cm] % Minor heading such as course title
+		
+		%----------------------------------------------------------------------------------------
+		%	TITLE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\HRule \\[0.4cm]
+		{ \huge \bfseries  TCP File Transfer}\\[0.4cm] % Title of your document
+		\HRule \\[1.5cm]
+		
+		%----------------------------------------------------------------------------------------
+		%	AUTHOR SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\begin{minipage}[t]{0.4\textwidth}
+			\begin{flushleft} \large
+				\emph{Author:}\\
+				Nguyen Duc Dan \\*
+				Nguyen Tri Huan	 \\*	
+				Nguyen Huu Chi Dat \\* 
+				Pham Minh Giang \\*
+				Nguyen Xuan Duy Anh \\*
+				%\textsc{Dan} % Your name
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}[t]{0.4\textwidth}
+			\begin{flushright} \large
+				\emph{Lecturer:} \\
+				Dr. Tran Giang Son %\textsc{Smith} % Supervisor's Name
+			\end{flushright}
+		\end{minipage}\\[2cm]
+		
+		
+		
+		% If you don't want a supervisor, uncomment the two lines below and remove the section above
+		%\Large \emph{Author:}\\
+		%John \textsc{Smith}\\[3cm] % Your name
+		
+		%----------------------------------------------------------------------------------------
+		%	DATE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		{\large \today}\\[1cm] % Date, change the \today to a set date if you want to be precise
+		
+		%----------------------------------------------------------------------------------------
+		%	LOGO SECTION
+		%----------------------------------------------------------------------------------------
+		\begin{center}
+			\includegraphics[scale=0.08]{images/usthlogo.png}\\[1cm]
+		\end{center}
+		% Include a department/university logo - this will require the graphicx package
+		
+		%----------------------------------------------------------------------------------------
+		
+		\vfill % Fill the rest of the page with whitespace
+		
+	\end{titlepage}
+	
+	\pagenumbering{roman}
+	\tableofcontents
+	\newpage
+	\pagenumbering{arabic}
+	
+	\section{Protocal Design}
+	\subsection{Figure}
+	\begin{center}
+		\includegraphics[scale=0.4]{images/Protocal.png}\\[1cm]
+	\end{center}
+\paragraph{Description}:
+Sockets help application process to communicate with each other using standard Unix file descriptors . Many routines exist to help ease the process of communication. Firstly, the server creates a socket, a communications endpoint. After that, we create a bind call that used to associate a socket with a port on the local machine, the port number is used by the kernel to match an incoming packet to a process. Then, we create listen call that used for waiting for incoming connections(we need to call bind() before you can listen). It’s the end of open listenfd. Accept call gets the pending connection on the port you are listening on. The next step is the Client/Server Session that help clients and servers communicate with each other by reading and writing to socket descriptors. In the final step, after closing Client/Server Session, we read END OF FILE on the server site to close the server connection
+
+\section{System Organizing}
+\subsection{Open Session}
+\begin{itemize}
+	\item The server socket will be bound to port 4333 after created 
+	\item The server socket then listening to any message/data received
+\end{itemize}
+\subsection{End open listen of server}
+\begin{itemize}
+	\item After getting the server socket to listening, the client socket will try to connect to the server
+\end{itemize}
+\subsection{End open client socket}
+\begin{itemize}
+	\item In client/Server session, both client and server sending each other message alternatively until ones decided to close.
+\end{itemize}
+
+\pagebreak
+
+\section{Code}
+\subsection{Client}
+\begin{lstlisting}
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+
+public class client {
+public static void main(String[] args) throws IOException {
+byte[] b = new byte[20002];
+Socket sr = new Socket("localhost", 4333);
+InputStream is = sr.getInputStream();
+FileOutputStream fr = new FileOutputStream("labwork1/src/test_tcp_result.txt");
+is.read(b, 0, b.length);
+fr.write(b, 0, b.length);
+		}
+}
+\end{lstlisting}
+
+\subsection{Server}
+\begin{lstlisting}
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class server {
+public static void main(String[] args) throws IOException {
+ServerSocket s = new ServerSocket(4333);
+Socket sr = s.accept();
+FileInputStream fr = new FileInputStream("labwork1/src/test_tcp_input.txt");
+byte[] b = new byte[20002];
+fr.read(b, 0, b.length);
+OutputStream os = sr.getOutputStream();
+os.write(b, 0, b.length);
+		}
+}
+\end{lstlisting}
+
+
+\section{Group participation}
+\begin{itemize}
+	\item Nguyen Duc Dan - BI8028 : Complete and implement the code
+	\item Nguyen Xuan Duy Anh - BI8014 : System Organizing
+	\item Nguyen Tri Huan - BI8069 : System Organizing
+	\item Pham Minh Giang - BI8054 - : Draw Figure
+	\item Nguyen Huu Chi Dat - BI8040: Summarize and 
+	Write the Report
+\end{itemize}
+\end{document}
